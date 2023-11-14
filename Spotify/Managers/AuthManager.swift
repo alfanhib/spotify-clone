@@ -127,7 +127,7 @@ final class AuthManager {
                 }
             }
         } else if let token = accessToken {
-             completion(token)
+            completion(token)
         }
     }
     
@@ -203,5 +203,13 @@ final class AuthManager {
             UserDefaults.standard.setValue(refreshToken, forKey: KeyCookies.RefreshToken)
         }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: KeyCookies.ExpiredDate)
+    }
+    
+    public func signOut(completion: @escaping(Bool) -> Void){
+        UserDefaults.standard.setValue(nil, forKey: KeyCookies.AccessToken)
+        UserDefaults.standard.setValue(nil, forKey: KeyCookies.RefreshToken)
+        UserDefaults.standard.setValue(nil, forKey: KeyCookies.ExpiredDate)
+        
+        completion(true)
     }
 }

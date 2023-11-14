@@ -46,11 +46,24 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let vc = ProfileViewController()
         vc.title = "Profile"
         vc.navigationItem.largeTitleDisplayMode = .never
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     
     private func signOutTapped() {
-        
+        AuthManager.shared.signOut { [weak self] isSignedOut in
+            if isSignedOut {
+                DispatchQueue.main.async {
+                    let navVC = UINavigationController(rootViewController: WelcomeViewController())
+                    navVC.navigationBar.prefersLargeTitles = true
+                    navVC.viewControllers.first?.navigationItem.largeTitleDisplayMode = .always
+                    navVC.modalPresentationStyle = .fullScreen
+                    self?.present(navVC, animated: true, completion: {
+                        self?.navigationController?.popViewController(animated: true)
+                    })
+                }
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
